@@ -17,12 +17,13 @@ namespace sm_coding_challenge.Controllers
     public class HomeController : Controller
     {
 
-        //private IDataProvider _dataProvider;
+        private  readonly IDataProvider _dataProvider;
         private readonly IPlayerService _playerService;
         private readonly ETagCache _cache;
-        public HomeController(IPlayerService playerService,ETagCache cache)
+        public HomeController(IPlayerService playerService,IDataProvider dataProvider, ETagCache cache)
         {
             _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
+            _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
             _cache = cache;
         }
 
@@ -137,6 +138,36 @@ namespace sm_coding_challenge.Controllers
             }
 
             return Ok(playerdetails);
+        }
+
+       [HttpGet]
+        /// <summary>
+        /// This method is used to fetch details of players from Third-party API.</summary>
+        /// <param name="id"> Id of player. </param>
+        /// <returns>  </returns>
+        /// <response code="200">Returns if the operation was successful.</response>
+        /// <response code="400">Returns if parameter is not valid.</response>            
+        /// <response code="404">Returns if url is invalid</response>
+        /// <remarks>
+        ///</remarks>
+        [ProducesResponseType(200, Type = typeof(DownloadTrackerResponse))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> FetchDetails(string id)
+        {
+            if(string.IsNullOrEmpty(id))
+            {
+                return BadRequest("Kindly specify url");
+            }
+
+
+            var fetchresult = await _dataProvider.FetchDetails(id);
+            if (!fetchresult.Success)
+            {
+                return NotFound();
+            }
+
+            return Ok(fetchresult);
         }
 
         public IActionResult Error()

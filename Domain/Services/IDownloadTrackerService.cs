@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using sm_coding_challenge.Domain.Models;
+using sm_coding_challenge.Domain.Services.Communication;
 using sm_coding_challenge.Resources;
 
 namespace sm_coding_challenge.Domain.Services
@@ -9,6 +10,6 @@ namespace sm_coding_challenge.Domain.Services
     {
         Task<DownloadTracker> FindByIdAsync(int id);
         Task<IEnumerable<DownloadTracker>> ListAsync();
-        Task<DownloadTrackerResource> SaveAsync(DownloadTracker downloadTracker);
+        Task<DownloadTrackerResponse> SaveAsync(DownloadTracker downloadTracker);
     }
 }

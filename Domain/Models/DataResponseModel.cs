@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using sm_coding_challenge.Resources;
 
 namespace sm_coding_challenge.Domain.Models
 {
@@ -19,16 +20,16 @@ namespace sm_coding_challenge.Domain.Models
         public string SeasonId { get; set; }
 
         [DataMember(Name = "rushing")]
-        public List<Player> Rushing { get; set; }
+        public List<RushingResource> Rushing { get; set; }
 
         [DataMember(Name = "passing")]
-        public List<Player> Passing { get; set; }
+        public List<PassingResource> Passing { get; set; }
 
         [DataMember(Name = "receiving")]
-        public List<Player> Receiving { get; set; }
+        public List<ReceivingResource> Receiving { get; set; }
 
         [DataMember(Name = "kicking")]
-        public List<Player> Kicking { get; set; }
+        public List<KickingResource> Kicking { get; set; }
 
         public DataResponseModel()
         {

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Options;
 using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Repositories;
 using sm_coding_challenge.Domain.Services;
@@ -27,14 +28,13 @@ namespace sm_coding_challenge.Services
             _rushingService = rushingService;
             _passingService = passingService;
             _receivingService = receivingService;
-            
-
         }
 
         public async Task<IEnumerable<Player>> ListAsync()
         {
            return await _playerRepository.ListAsync();
         }
+ 
         public async Task<PlayerDetailsResponse> GetPlayer(string PlayerId)
         { 
             PlayerResource resource = new PlayerResource();
@@ -56,7 +56,7 @@ namespace sm_coding_challenge.Services
                     resource.Name = playerdetails.Name;
                     resource.PlayerId = PlayerId;
                     resource.Position = playerdetails.Position;
-                    // Fetch all players kickins and map object returned to Resource.
+                    // Fetch all players kickings and map object returned to Resource.
                     var kickings =  await _kickingService.GetKickingsByPlayerIdAsync(PlayerId);
                     if(kickings != null)
                     {
@@ -167,6 +167,7 @@ namespace sm_coding_challenge.Services
            return response;
         }
         
+        // This method fetches the latest data about a player on the database
         public async Task<LatestPlayerResponse> GetLatestPlayers(List<string> PlayerIds)
         {
             

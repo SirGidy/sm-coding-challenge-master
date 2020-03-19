@@ -14,5 +14,7 @@ namespace sm_coding_challenge.Resources
         public int ExtraPtMade { get; set; }
         [JsonPropertyName("extra_pt_att")]
         public int ExtraPtAtt { get; set; }
+        [JsonPropertyName("entry_id")]
+        public string EntryId { get; set; }
     }
 }

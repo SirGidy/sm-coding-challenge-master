@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Repositories;
 using sm_coding_challenge.Domain.Services;
 using sm_coding_challenge.Persistence.Context;
@@ -35,13 +36,13 @@ namespace sm_coding_challenge
             });
             services.AddScoped<ETagCache>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            
+
 
             services.AddDbContext<AppDbContext>(options => {
                 options.UseInMemoryDatabase("api-in-memory");
             });
             services.AddControllersWithViews();
-            services.AddResponseCaching();
+            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IDownloadTrackerRepository, DownloadTrackerRepository>();
@@ -51,12 +52,13 @@ namespace sm_coding_challenge
             services.AddScoped<IRushingRepository, RushingRepository>();
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 
-            //services.AddTransient<IDataProvider, DataProviderImpl>();
+            services.AddTransient<IDataProvider, DataProviderImpl>();
             services.AddScoped<IKickingService, KickingService>();
             services.AddScoped<IPassingService, PassingService>();
             services.AddScoped<IReceivingService,ReceivingService>();
             services.AddScoped<IRushingService,RushingService>();
             services.AddScoped<IPlayerService, PlayerService>();
+            services.AddScoped<IDownloadTrackerService, DownloadTrackerService>();
 
             services.AddAutoMapper(typeof(Startup));
         }

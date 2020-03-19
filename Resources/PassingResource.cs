@@ -15,5 +15,7 @@ namespace sm_coding_challenge.Resources
         public int Cmp { get; set; }
         [JsonPropertyName("int")]
         public int Int { get; set; }
+        [JsonPropertyName("entry_id")]
+        public string EntryId { get; set; }
     }
 }

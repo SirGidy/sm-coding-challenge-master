@@ -11,5 +11,10 @@ namespace sm_coding_challenge.Resources
         public string SportsName { get; set; }
         public string CompetitionName { get; set; }
         public string SeasonId { get; set; }
+
+        public DownloadTrackerResource ()
+        {
+            
+        }
     }
 }
