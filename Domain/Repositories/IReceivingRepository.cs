@@ -9,6 +9,9 @@ namespace sm_coding_challenge.Domain.Repositories
         Task<IEnumerable<Receiving>> ListAsync();
         Task AddAsync(Receiving receiving);
         Task<Receiving> FindByIdAsync(int id);
+        Task<IEnumerable<Receiving>> GetReceivingsByPlayerIdAsync(string PlayerId);
+        Task<Receiving> GetLatestReceivingByPlayerIdAsync(string PlayerId);
+        // Task<IEnumerable<Receiving>> GetReceivingsByPlayerIdsAsync(IList<string> PlayerId);
         void Update(Receiving receiving);
         void Remove(Receiving receiving);
 

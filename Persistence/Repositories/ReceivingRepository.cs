@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using sm_coding_challenge.Domain.Models;
@@ -26,6 +27,18 @@ namespace sm_coding_challenge.Persistence.Repositories
         public async Task<Receiving> FindByIdAsync(int id)
         {
             return await _context.Receivings.FindAsync(id);
+        }
+        public async Task<IEnumerable<Receiving>> GetReceivingsByPlayerIdAsync(string PlayerId)
+        {
+            return await _context.Receivings.Where(p => p.PlayerId == PlayerId).ToListAsync();
+        }
+        // public async Task<IEnumerable<Receiving>> GetReceivingsByPlayerIdsAsync(IList<string> PlayerIds)
+        // {
+        //    return await _context.Receivings.Where(a => PlayerIds.Any(b => b.Contains( a.PlayerId) ));
+        // }
+        public async Task<Receiving> GetLatestReceivingByPlayerIdAsync(string PlayerId)
+        {
+            return await _context.Receivings.LastOrDefaultAsync(p => p.PlayerId == PlayerId);
         }
 
         public void Update(Receiving receiving)

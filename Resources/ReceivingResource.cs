@@ -1,14 +1,17 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace sm_coding_challenge.Resources
 {
     public class ReceivingResource : BaseResource
     {
-        [Display(Name = "yds")]
+        [JsonPropertyName("yds")]
         public int Yds { get; set; }
-        [Display(Name = "tds")]
+        [JsonPropertyName("tds")]
         public int Tds { get; set; }
-        [Display(Name = "rec")]
+        [JsonPropertyName("rec")]
         public int Rec { get; set; }
+        [JsonPropertyName("entry_id")]
+        public string EntryId { get; set; }
     }
 }

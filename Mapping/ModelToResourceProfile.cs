@@ -8,6 +8,8 @@ namespace sm_coding_challenge.Mapping
         public ModelToResourceProfile()
         {
             CreateMap<Rushing, RushingResource>();
+            CreateMap<Kicking, KickingResource>();
+            CreateMap<KickingResource,Kicking >();
             //CreateMap<Product, ProductResource>();
         }
     }

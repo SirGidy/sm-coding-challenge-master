@@ -1,8 +1,15 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using sm_coding_challenge.Domain.Repositories;
+using sm_coding_challenge.Domain.Services;
+using sm_coding_challenge.Persistence.Context;
+using sm_coding_challenge.Persistence.Repositories;
+using sm_coding_challenge.Services;
 using sm_coding_challenge.Services.DataProvider;
 
 namespace sm_coding_challenge
@@ -19,9 +26,27 @@ namespace sm_coding_challenge
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<AppDbContext>(options => {
+                options.UseInMemoryDatabase("api-in-memory");
+            });
             services.AddControllersWithViews();
 
-            services.AddTransient<IDataProvider, DataProviderImpl>();
+            services.AddScoped<IPlayerRepository, PlayerRepository>();
+            services.AddScoped<IDownloadTrackerRepository, DownloadTrackerRepository>();
+            services.AddScoped<IKickingRepository, KickingRepository>();
+            services.AddScoped<IPassingRepository, PassingRepository>();
+            services.AddScoped<IReceivingRepository, ReceivingRepository>();
+            services.AddScoped<IRushingRepository, RushingRepository>();
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+
+            //services.AddTransient<IDataProvider, DataProviderImpl>();
+            services.AddScoped<IKickingService, KickingService>();
+            services.AddScoped<IPassingService, PassingService>();
+            services.AddScoped<IReceivingService,ReceivingService>();
+            services.AddScoped<IRushingService,RushingService>();
+            services.AddScoped<IPlayerService, PlayerService>();
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

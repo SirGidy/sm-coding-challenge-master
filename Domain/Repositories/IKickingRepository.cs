@@ -9,7 +9,7 @@ namespace sm_coding_challenge.Domain.Repositories
         Task<IEnumerable<Kicking>> ListAsync();
         Task AddAsync(Kicking kick);
         Task<Kicking> FindByIdAsync(int id);
-        Task<Kicking> GetPlayerKickingByIdAsync(string PlayerId);
+        Task<IEnumerable<Kicking>> GetKickingsByPlayerIdAsync(string PlayerId);
         void Update(Kicking kick);
         void Remove(Kicking kick);
 

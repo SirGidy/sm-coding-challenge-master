@@ -9,6 +9,8 @@ namespace sm_coding_challenge.Domain.Repositories
         Task<IEnumerable<Rushing>> ListAsync();
         Task AddAsync(Rushing rushing);
         Task<Rushing> FindByIdAsync(int id);
+        Task<IEnumerable<Rushing>> GetRushingsByPlayerIdAsync(string PlayerId);
+        Task<Rushing> GetLatestRushingByPlayerIdAsync(string PlayerId);
         void Update(Rushing rushing);
         void Remove(Rushing rushing);
 

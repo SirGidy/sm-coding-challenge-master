@@ -40,6 +40,19 @@ namespace sm_coding_challenge.Services
             }
 
         }
+        public async Task<IEnumerable<Kicking>> GetKickingsByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _kickingRepository.GetKickingsByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+
+        }
 
         public async Task<KickingResource> SaveAsync(Kicking kicking )
         {

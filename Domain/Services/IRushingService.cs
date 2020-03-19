@@ -9,6 +9,8 @@ namespace sm_coding_challenge.Domain.Services
     {
         Task<Rushing> FindByIdAsync(int id);
         Task<IEnumerable<Rushing>> ListAsync();
+        Task<IEnumerable<Rushing>> GetRushingsByPlayerIdAsync(string PlayerId);
+        Task<Rushing> GetLatestRushingByPlayerIdAsync(string PlayerId);
         Task<RushingResource> SaveAsync(Rushing rushing);
     }
 }

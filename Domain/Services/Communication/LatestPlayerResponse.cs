@@ -12,14 +12,14 @@ namespace sm_coding_challenge.Domain.Services.Communication
         public IList<RushingResource> rushing  {get; set;}
      
 
-        protected LatestPlayerResponse(IList<ReceivingResource> receivingresource,IList<RushingResource> rushingresource)
+        public LatestPlayerResponse(IList<ReceivingResource> receivingresource,IList<RushingResource> rushingresource)
         {
             Success = true;
             receiving = receivingresource;
             rushing = rushingresource;
         }
 
-        protected LatestPlayerResponse(string message)
+        public LatestPlayerResponse(string message)
         {
             Success = false;
             Message = message;

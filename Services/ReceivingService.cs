@@ -37,6 +37,30 @@ namespace sm_coding_challenge.Services
                 return null;
             }
         }
+        public async Task<IEnumerable<Receiving>> GetReceivingsByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _receivingRepository.GetReceivingsByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+        }
+        public async Task<Receiving> GetLatestReceivingByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _receivingRepository.GetLatestReceivingByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+        }
 
         public async Task<ReceivingResource> SaveAsync(Receiving receiving )
         {

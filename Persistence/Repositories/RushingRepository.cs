@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using sm_coding_challenge.Domain.Models;
@@ -26,6 +27,14 @@ namespace sm_coding_challenge.Persistence.Repositories
         public async Task<Rushing> FindByIdAsync(int id)
         {
             return await _context.Rushings.FindAsync(id);
+        }
+        public async Task<IEnumerable<Rushing>> GetRushingsByPlayerIdAsync(string PlayerId)
+        {
+            return await _context.Rushings.Where(p => p.PlayerId == PlayerId).ToListAsync();
+        }
+        public async Task<Rushing> GetLatestRushingByPlayerIdAsync(string PlayerId)
+        {
+            return await _context.Rushings.LastOrDefaultAsync(p => p.PlayerId == PlayerId);
         }
 
         public void Update(Rushing rushing)

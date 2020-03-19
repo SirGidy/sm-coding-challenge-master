@@ -9,6 +9,7 @@ namespace sm_coding_challenge.Domain.Services
     {
         Task<Passing> FindByIdAsync(int id);
         Task<IEnumerable<Passing>> ListAsync();
+        Task<IEnumerable<Passing>> GetPassingsByPlayerIdAsync(string PlayerId);
         Task<PassingResource> SaveAsync(Passing passing);
     }
 }

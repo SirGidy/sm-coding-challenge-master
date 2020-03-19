@@ -1,3 +1,6 @@
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
 namespace sm_coding_challenge.Domain.Models
 {
     
@@ -5,6 +8,7 @@ namespace sm_coding_challenge.Domain.Models
     {
         public int Id { get; set; }
         public string PlayerId {get;set;}
+        [JsonPropertyName("entry_id")]
         public string EntryId { get; set; }
         public int Yds { get; set; }
         public int Att { get; set; }

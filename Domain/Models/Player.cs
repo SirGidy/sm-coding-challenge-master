@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace sm_coding_challenge.Domain.Models
@@ -9,10 +10,10 @@ namespace sm_coding_challenge.Domain.Models
         public string PlayerId { get; set; }
         public string Name { get; set; }
         public string Position { get; set; }
-        public Rushing rushing { get; set; }
-        public Passing passing { get; set; }
-        public Receiving receiving { get; set; }
-        public Kicking kicking {get;set;}
+        public IList<Rushing> Rushings { get; set; } = new List<Rushing>();
+        public IList<Passing> Passing { get; set; } = new List<Passing>();
+        public IList<Receiving> Receivings { get; set; } = new List<Receiving>();
+        public IList<Kicking> Kickings { get; set; } = new List<Kicking>();       
     }
 }
 

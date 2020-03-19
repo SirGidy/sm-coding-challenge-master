@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using sm_coding_challenge.Domain.Models;
@@ -26,6 +27,10 @@ namespace sm_coding_challenge.Persistence.Repositories
         public async Task<Passing> FindByIdAsync(int id)
         {
             return await _context.Passings.FindAsync(id);
+        }
+        public async Task<IEnumerable<Passing>> GetPassingsByPlayerIdAsync(string PlayerId)
+        {
+            return await _context.Passings.Where(p => p.PlayerId == PlayerId).ToListAsync();
         }
 
         public void Update(Passing passing)

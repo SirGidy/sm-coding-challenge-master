@@ -37,6 +37,30 @@ namespace sm_coding_challenge.Services
                 return null;
             }
         }
+        public async Task<IEnumerable<Rushing>> GetRushingsByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _rushingRepository.GetRushingsByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+        }
+        public async Task<Rushing> GetLatestRushingByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _rushingRepository.GetLatestRushingByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+        }
 
         public async Task<RushingResource> SaveAsync(Rushing rushing )
         {

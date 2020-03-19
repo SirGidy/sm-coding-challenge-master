@@ -1,17 +1,19 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace sm_coding_challenge.Resources
 {
     public abstract class BaseResource
     {
-        [Display(Name = "player_id")]
+        [JsonPropertyName( "player_id")]
         public string PlayerId { get; set; }
 
-        [Display(Name = "name")]
+        [JsonPropertyName("name")]
         public string Name { get; set; }
 
-        [Display(Name = "position")]
+        [JsonPropertyName("position")]
         public string Position { get; set; }
+
 
     }
 }

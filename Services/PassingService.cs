@@ -37,6 +37,19 @@ namespace sm_coding_challenge.Services
                 return null;
             }
         }
+        public async Task<IEnumerable<Passing>> GetPassingsByPlayerIdAsync(string PlayerId)
+        {
+            try
+            {
+                return await _passingRepository.GetPassingsByPlayerIdAsync(PlayerId);
+            }
+            catch (Exception ex)
+            {
+                //log error
+                return null;
+            }
+
+        }
 
         public async Task<PassingResource> SaveAsync(Passing passing )
         {

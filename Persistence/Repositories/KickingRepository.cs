@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using sm_coding_challenge.Domain.Models;
@@ -27,9 +28,9 @@ namespace sm_coding_challenge.Persistence.Repositories
         {
             return await _context.Kickings.FindAsync(id);
         }
-        public Task<Kicking> GetPlayerKickingByIdAsync(string PlayerId)
+        public async Task<IEnumerable<Kicking>> GetKickingsByPlayerIdAsync(string PlayerId)
         {
-            return await _context.Players..FirstOrDefaultAsync(p => p.PlayerId == PlayerId);
+            return await _context.Kickings.Where(p => p.PlayerId == PlayerId).ToListAsync();
         }
 
         public void Update(Kicking kicking)
