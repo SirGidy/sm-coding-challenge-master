@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
 using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Services;
 using sm_coding_challenge.Domain.Services.Communication;
+using sm_coding_challenge.Services;
 using sm_coding_challenge.Services.DataProvider;
 
 namespace sm_coding_challenge.Controllers
@@ -16,9 +19,11 @@ namespace sm_coding_challenge.Controllers
 
         //private IDataProvider _dataProvider;
         private readonly IPlayerService _playerService;
-        public HomeController(IPlayerService playerService)
+        private readonly ETagCache _cache;
+        public HomeController(IPlayerService playerService,ETagCache cache)
         {
             _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
+            _cache = cache;
         }
 
         public IActionResult Index()
@@ -34,25 +39,44 @@ namespace sm_coding_challenge.Controllers
         /// <response code="200">Returns if the operation was successful.</response>
         /// <response code="400">Returns if parameter is not valid.</response>            
         /// <response code="404">Returns if player with Id does not exist.</response>
+        /// <response code="304">Returns  if player have not been modifed since last fetch and retrieved from cache</response>
         /// <remarks>
         ///</remarks>
         [ProducesResponseType(200, Type = typeof(PlayerDetailsResponse))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
+        [ProducesResponseType(304)]
         public async Task<IActionResult> Player(string id)
         {
             if(string.IsNullOrEmpty(id))
             {
                 return BadRequest("Kindly specify player id");
             }
-            var playerdetails = await _playerService.GetPlayer(id);
 
-            if ( ! playerdetails.Success )
+            PlayerDetailsResponse playerDetails = _cache.GetCachedObject<PlayerDetailsResponse>($"player-{id}");
+
+            // If we have no cached details, then get the details from the database
+            if(playerDetails == null)
             {
-                return  NotFound(playerdetails);
+                playerDetails = await _playerService.GetPlayer(id);
+            }
+           
+
+            if ( ! playerDetails.Success )
+            {
+                return  NotFound(playerDetails);
+            }
+            bool isModified = _cache.SetCachedObject($"player-{id}", playerDetails);
+            if (isModified)
+            {
+                return Ok(playerDetails);
+            }
+            else
+            {
+                return StatusCode((int)HttpStatusCode.NotModified);
             }
 
-            return Ok(playerdetails);
+
                  
         }
 

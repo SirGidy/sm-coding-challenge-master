@@ -7,6 +7,7 @@ namespace sm_coding_challenge.Domain.Models
     public class Rushing
     {
         public int Id { get; set; }
+         [JsonPropertyName("player_id")]
         public string PlayerId {get;set;}
         [JsonPropertyName("entry_id")]
         public string EntryId { get; set; }

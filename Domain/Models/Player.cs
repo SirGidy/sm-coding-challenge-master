@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 
 namespace sm_coding_challenge.Domain.Models
 {
@@ -7,7 +8,9 @@ namespace sm_coding_challenge.Domain.Models
     public class Player
     {
         public int Id { get; set; }
-        public string PlayerId { get; set; }
+        [JsonPropertyName("player_id")]
+        public string PlayerId { get; set; 
+        }
         public string Name { get; set; }
         public string Position { get; set; }
         public IList<Rushing> Rushings { get; set; } = new List<Rushing>();
