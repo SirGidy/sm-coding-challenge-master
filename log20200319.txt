@@ -1,0 +1,7 @@
+2020-03-19 19:19:03.568 +01:00 [INF] Starting up
+2020-03-19 19:19:05.244 +01:00 [INF] Entity Framework Core 3.1.2 initialized 'AppDbContext' using provider 'Microsoft.EntityFrameworkCore.InMemory' with options: StoreName=api-in-memory 
+2020-03-19 19:19:05.325 +01:00 [INF] Saved 16 entities to in-memory store.
+2020-03-19 19:19:05.663 +01:00 [INF] Now listening on: http://localhost:5000
+2020-03-19 19:19:05.663 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2020-03-19 19:19:05.663 +01:00 [INF] Hosting environment: Development
+2020-03-19 19:19:05.663 +01:00 [INF] Content root path: /Users/sirgidy/Downloads/sm-coding-challenge-master

@@ -7,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Repositories;
 using sm_coding_challenge.Domain.Services;
+using sm_coding_challenge.Middleware;
 using sm_coding_challenge.Persistence.Context;
 using sm_coding_challenge.Persistence.Repositories;
 using sm_coding_challenge.Services;
@@ -19,9 +21,11 @@ namespace sm_coding_challenge
 {
     public class Startup
     {
+        //private readonly ILoggerFactory _loggerFactory;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            //_loggerFactory = loggerFactory;
         }
 
         public IConfiguration Configuration { get; }
@@ -30,11 +34,17 @@ namespace sm_coding_challenge
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDistributedRedisCache(options =>
+            // services.AddDistributedRedisCache(options =>
+            // {
+            //     options.Configuration = "localhost:6379";
+            // });
+            var appSettings = Configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:6379";
+                options.Configuration =  appSettings.RedisConnectionString;
             });
-            services.AddScoped<ETagCache>();
+            //services.AddScoped<ETagCache>();
+            
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 
@@ -43,7 +53,7 @@ namespace sm_coding_challenge
             });
             services.AddControllersWithViews();
             services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
-
+            services.AddScoped<IResponseCacheService,ResponseCacheService>();
             services.AddScoped<IPlayerRepository, PlayerRepository>();
             services.AddScoped<IDownloadTrackerRepository, DownloadTrackerRepository>();
             services.AddScoped<IKickingRepository, KickingRepository>();
@@ -76,9 +86,10 @@ namespace sm_coding_challenge
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            //app.ConfigureExceptionHandler(_loggerFactory);
             app.UseResponseCaching();
             app.UseStaticFiles();
-
+           
             app.UseRouting();
 
             app.UseAuthorization();

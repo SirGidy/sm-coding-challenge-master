@@ -7,16 +7,19 @@ namespace sm_coding_challenge.Mapping
     {
         public ModelToResourceProfile()
         {
-            CreateMap<Rushing, RushingResource>();
-            CreateMap<RushingResource,Rushing>();
-            CreateMap<Kicking, KickingResource>();
-            CreateMap<KickingResource,Kicking >();
-            CreateMap<Receiving,ReceivingResource >();
-            CreateMap<ReceivingResource,Receiving >();
-            CreateMap<PassingResource,Passing >();
-            CreateMap<Passing,PassingResource >();
-            
+            CreateMap<Rushing, RushingResource>().ReverseMap();
+            CreateMap<Kicking, KickingResource>().ReverseMap();
+            CreateMap<Receiving,ReceivingResource >().ReverseMap();
+            CreateMap<PassingResource,Passing >().ReverseMap();
+
             //CreateMap<Product, ProductResource>();
+
+            //     .ForMember(dest =>
+            //     dest.FName,
+            //     opt => opt.MapFrom(src => src.FirstName))
+            // .ForMember(dest =>
+            //     dest.LName,
+            //     opt => opt.MapFrom(src => src.LastName))
         }
     }
 }

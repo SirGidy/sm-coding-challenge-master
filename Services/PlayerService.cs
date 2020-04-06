@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Repositories;
@@ -14,20 +15,22 @@ namespace sm_coding_challenge.Services
     public class PlayerService : IPlayerService
     {
         private readonly IPlayerRepository _playerRepository;
-        private readonly IUnitOfWork _unitOfWork;
         private readonly IKickingService _kickingService;
         private readonly IRushingService _rushingService;
         private readonly IPassingService _passingService;
         private readonly IReceivingService _receivingService;
+        private readonly ILogger<PlayerService> _logger;
+        private readonly IMapper _mapper;
         
-        public PlayerService(IUnitOfWork unitOfWork,IPlayerRepository playerRepository, IKickingService kickingService, IRushingService rushingService , IPassingService passingService,IReceivingService receivingService)
+        public PlayerService( IMapper mapper,ILogger<PlayerService> logger,IPlayerRepository playerRepository, IKickingService kickingService, IRushingService rushingService , IPassingService passingService,IReceivingService receivingService)
         {
-            _unitOfWork = unitOfWork;
             _playerRepository = playerRepository;
             _kickingService = kickingService;
             _rushingService = rushingService;
             _passingService = passingService;
             _receivingService = receivingService;
+            _logger = logger;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Player>> ListAsync()
@@ -60,29 +63,33 @@ namespace sm_coding_challenge.Services
                     var kickings =  await _kickingService.GetKickingsByPlayerIdAsync(PlayerId);
                     if(kickings != null)
                     {
-                        // fix mapping
-                        //var kickingresource =  Mapper.Map<IEnumerable<KickingResource>, IEnumerable<Kicking>>(kickings);
-                        resource.kicking =   kickings;
+                        var kickingresource =  _mapper.Map<IEnumerable<Kicking>,IEnumerable<KickingResource>>(kickings);
+                        resource.kicking =   kickingresource;
                     }
 
                     // Fetch all players rushing.
                     var rushings =  await _rushingService.GetRushingsByPlayerIdAsync(PlayerId);
                     if(rushings != null)
                     {
-                        resource.rushing = rushings;
+                        var rushingresource =  _mapper.Map<IEnumerable<Rushing>,IEnumerable<RushingResource>>(rushings);
+                        resource.rushing = rushingresource;
                     }
                     //Fetch all player passing.
                     var passings =  await _passingService.GetPassingsByPlayerIdAsync(PlayerId);
                     if(passings != null)
                     {
-                        resource.passing = passings;
+                        var passingresource =  _mapper.Map<IEnumerable<Passing>,IEnumerable<PassingResource>>(passings);
+                        resource.passing = passingresource;
                     }
                     //Fetch all player receivings.
                     var receivings =  await _receivingService.GetReceivingsByPlayerIdAsync(PlayerId);
                     if(receivings != null)
                     {
-                        resource.receiving = receivings;
+                        var receivingresource =  _mapper.Map<IEnumerable<Receiving>,IEnumerable<ReceivingResource>>(receivings);
+                        resource.receiving = receivingresource;
                     }
+
+                    _logger.LogInformation("Player {@resource} retrieved", resource);
 
 
                 }
@@ -126,29 +133,34 @@ namespace sm_coding_challenge.Services
                         var kickings = await _kickingService.GetKickingsByPlayerIdAsync(PlayerId);
                         if (kickings != null)
                         {
-                            // fix mapping
-                            //var kickingresource =  Mapper.Map<IEnumerable<KickingResource>, IEnumerable<Kicking>>(kickings);
-                            resource.kicking = kickings;
+                            var kickingresource = _mapper.Map<IEnumerable<Kicking>, IEnumerable<KickingResource>>(kickings);
+                            resource.kicking = kickingresource;
+                            
                         }
-
+                        
                         // Fetch all players rushing.
                         var rushings = await _rushingService.GetRushingsByPlayerIdAsync(PlayerId);
                         if (rushings != null)
                         {
-                            resource.rushing = rushings;
+                            var rushingresource = _mapper.Map<IEnumerable<Rushing>, IEnumerable<RushingResource>>(rushings);
+                            resource.rushing = rushingresource;
                         }
                         //Fetch all player passing.
                         var passings = await _passingService.GetPassingsByPlayerIdAsync(PlayerId);
                         if (passings != null)
                         {
-                            resource.passing = passings;
+                            var passingresource = _mapper.Map<IEnumerable<Passing>, IEnumerable<PassingResource>>(passings);
+                            resource.passing = passingresource;
                         }
                         //Fetch all player receivings.
                         var receivings = await _receivingService.GetReceivingsByPlayerIdAsync(PlayerId);
                         if (receivings != null)
                         {
-                            resource.receiving = receivings;
+                            var receivingresource = _mapper.Map<IEnumerable<Receiving>, IEnumerable<ReceivingResource>>(receivings);
+                            resource.receiving = receivingresource;
                         }
+
+
                         response.Add(new PlayerDetailsResponse(resource));
 
                     }
@@ -195,16 +207,16 @@ namespace sm_coding_challenge.Services
                         var rushing = await _rushingService.GetLatestRushingByPlayerIdAsync(PlayerId);
                         if (rushing != null)
                         {
-                            RushingResource rushingresource = new RushingResource();
+                            RushingResource rushingresource =  _mapper.Map<Rushing,RushingResource>(rushing);//  new RushingResource();
 
                             rushingresource.Name = playerdetails.Name;
-                            rushingresource.PlayerId = PlayerId;
+                            //rushingresource.PlayerId = PlayerId;
                             rushingresource.Position = playerdetails.Position;
-                            rushingresource.Att = rushing.Att;
-                            rushingresource.EntryId = rushing.EntryId;
-                            rushingresource.Fum = rushing.Fum;
-                            rushingresource.Tds = rushing.Tds;
-                            rushingresource.Yds = rushing.Yds;
+                            // rushingresource.Att = rushing.Att;
+                            // rushingresource.EntryId = rushing.EntryId;
+                            // rushingresource.Fum = rushing.Fum;
+                            // rushingresource.Tds = rushing.Tds;
+                            // rushingresource.Yds = rushing.Yds;
 
                             rushingResources.Add(rushingresource);
                         }
@@ -213,14 +225,14 @@ namespace sm_coding_challenge.Services
                         var receiving = await _receivingService.GetLatestReceivingByPlayerIdAsync(PlayerId);
                         if (receiving != null)
                         {
-                            ReceivingResource receivingResource = new ReceivingResource();
-                            receivingResource.EntryId = receiving.EntryId;
+                            ReceivingResource receivingResource = _mapper.Map<Receiving,ReceivingResource>(receiving);//new ReceivingResource();
+                            // receivingResource.EntryId = receiving.EntryId;
                             receivingResource.Name = playerdetails.Name;
-                            receivingResource.PlayerId = PlayerId;
+                            // receivingResource.PlayerId = PlayerId;
                             receivingResource.Position = playerdetails.Position;
-                            receivingResource.Rec = receiving.Rec;
-                            receivingResource.Tds = receiving.Tds;
-                            receivingResource.Yds = receiving.Yds;
+                            // receivingResource.Rec = receiving.Rec;
+                            // receivingResource.Tds = receiving.Tds;
+                            // receivingResource.Yds = receiving.Yds;
 
                             receivingResources.Add(receivingResource);
                             

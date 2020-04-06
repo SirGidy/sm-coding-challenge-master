@@ -7,9 +7,9 @@ namespace sm_coding_challenge.Resources
     public class PlayerResource : BaseResource
     {
         
-        public IEnumerable<Rushing> rushing  {get; set;}
-        public IEnumerable<Passing> passing {get; set;}
-        public IEnumerable<Receiving> receiving {get; set;}
-        public IEnumerable<Kicking> kicking {get; set;}
+        public IEnumerable<RushingResource> rushing  {get; set;}
+        public IEnumerable<PassingResource> passing {get; set;}
+        public IEnumerable<ReceivingResource> receiving {get; set;}
+        public IEnumerable<KickingResource> kicking {get; set;}
     }
 }

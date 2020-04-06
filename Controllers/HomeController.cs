@@ -11,6 +11,8 @@ using sm_coding_challenge.Domain.Services;
 using sm_coding_challenge.Domain.Services.Communication;
 using sm_coding_challenge.Services;
 using sm_coding_challenge.Services.DataProvider;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace sm_coding_challenge.Controllers
 {
@@ -19,12 +21,17 @@ namespace sm_coding_challenge.Controllers
 
         private  readonly IDataProvider _dataProvider;
         private readonly IPlayerService _playerService;
-        private readonly ETagCache _cache;
-        public HomeController(IPlayerService playerService,IDataProvider dataProvider, ETagCache cache)
+        private readonly IResponseCacheService _cache;
+        private readonly ILogger<HomeController> _logger;
+        private readonly IOptions<AppSettings> _appSettings;
+    
+        public HomeController(IOptions<AppSettings> appSettings,ILogger<HomeController> logger,IPlayerService playerService,IDataProvider dataProvider, IResponseCacheService cache)
         {
             _playerService = playerService ?? throw new ArgumentNullException(nameof(playerService));
             _dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
             _cache = cache;
+            _logger = logger;
+            _appSettings = appSettings;
         }
 
         public IActionResult Index()
@@ -49,33 +56,44 @@ namespace sm_coding_challenge.Controllers
         [ProducesResponseType(304)]
         public async Task<IActionResult> Player(string id)
         {
-            if(string.IsNullOrEmpty(id))
+            try
             {
-                return BadRequest("Kindly specify player id");
+                if (string.IsNullOrEmpty(id))
+                {
+                    return BadRequest("Kindly specify player id");
+                }
+
+                PlayerDetailsResponse playerDetails =  await _cache.GetCachedObject<PlayerDetailsResponse>($"player-{id}");
+
+                // If we have no cached details, then get the details from the database
+                if (playerDetails == null)
+                {
+                    playerDetails = await _playerService.GetPlayer(id);
+                }
+
+
+                if (!playerDetails.Success)
+                {
+                    return NotFound(playerDetails);
+                }
+                //bool isModified =  await _cache.SetCachedObject($"player-{id}", playerDetails,TimeSpan.FromSeconds(600));
+                bool isModified =  await _cache.SetCachedObject($"player-{id}", playerDetails,TimeSpan.FromSeconds( Convert.ToDouble(_appSettings.Value.TimeSpan)));
+                if (isModified)
+                {
+                    return Ok(playerDetails);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.NotModified);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogInformation($"Error processing request{ex}" );
+                return StatusCode(502);
             }
 
-            PlayerDetailsResponse playerDetails = _cache.GetCachedObject<PlayerDetailsResponse>($"player-{id}");
 
-            // If we have no cached details, then get the details from the database
-            if(playerDetails == null)
-            {
-                playerDetails = await _playerService.GetPlayer(id);
-            }
-           
-
-            if ( ! playerDetails.Success )
-            {
-                return  NotFound(playerDetails);
-            }
-            bool isModified = _cache.SetCachedObject($"player-{id}", playerDetails);
-            if (isModified)
-            {
-                return Ok(playerDetails);
-            }
-            else
-            {
-                return StatusCode((int)HttpStatusCode.NotModified);
-            }
 
 
                  

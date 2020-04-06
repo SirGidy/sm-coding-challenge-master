@@ -1,19 +1,21 @@
-using System.Linq;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Caching.Distributed;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Distributed;
+using sm_coding_challenge.Domain.Services;
+using Microsoft.AspNetCore.Http;
+using System.Linq;
 
 namespace sm_coding_challenge.Services
 {
-    public class ETagCache
+    public class ResponseCacheService : IResponseCacheService
     {
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _distributedCache;
         private readonly HttpContext _httpContext;
-        public ETagCache(IDistributedCache cache, IHttpContextAccessor httpContextAccessor)
+
+        public ResponseCacheService(IDistributedCache distributedCache, IHttpContextAccessor httpContextAccessor)
         {
-            _cache = cache;
+            _distributedCache = distributedCache;
             _httpContext = httpContextAccessor.HttpContext;
         }
 
@@ -27,7 +29,7 @@ namespace sm_coding_challenge.Services
                 string cacheKey = $"{cacheKeyPrefix}-{requestETag}";
 
                 // Get the cached item
-                var cachedObjectJson = await _cache.GetStringAsync(cacheKey);
+                var cachedObjectJson = await _distributedCache.GetStringAsync(cacheKey);
 
                 // If there was a cached item then deserialise this 
                 if (!string.IsNullOrEmpty(cachedObjectJson))
@@ -36,26 +38,21 @@ namespace sm_coding_challenge.Services
                     return cachedObject;
                 }
             }
- 
+
             return default(T);
         }
 
         public async Task<bool> SetCachedObject(string cacheKeyPrefix, dynamic objectToCache, TimeSpan timeToLive)
         {
-            if (!IsCacheable(objectToCache))
-            {
-                return true;
-            }
-
             string requestETag = GetRequestedETag();
-            string responseETag = objectToCache.Name;
+            string responseETag = Guid.NewGuid().ToString();
 
             // Add the player details to the cache for 6 days  if not already in the cache
             if (objectToCache != null && responseETag != null)
             {
                 string cacheKey = $"{cacheKeyPrefix}-{responseETag}";
                 string serializedObjectToCache = JsonSerializer.Serialize(objectToCache);
-               await _cache.SetStringAsync(cacheKey, serializedObjectToCache, new DistributedCacheEntryOptions() { AbsoluteExpirationRelativeToNow = timeToLive });
+                await _distributedCache.SetStringAsync(cacheKey, serializedObjectToCache, new DistributedCacheEntryOptions() { AbsoluteExpirationRelativeToNow = timeToLive });
             }
 
             // Add the current ETag to the HTTP header
@@ -63,6 +60,7 @@ namespace sm_coding_challenge.Services
 
             bool IsModified = !(_httpContext.Request.Headers.ContainsKey("If-None-Match") && responseETag == requestETag);
             return IsModified;
+
         }
 
         private string GetRequestedETag()

@@ -63,7 +63,8 @@ namespace sm_coding_challenge.Persistence.Context
             builder.Entity<Passing>().HasData
             (
                new Passing { Id = 100, PlayerId = "8f22eb36-5282-407a-b6f9-f9b62e5f7318", EntryId = "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds = 177, Att = 23, Tds = 1, Cmp=12,Int = 1  }, 
-               new Passing { Id = 105, PlayerId = "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId = "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds = 43, Att = 0, Tds = 21, Cmp=12,Int = 2}, 
+               new Passing { Id = 105, PlayerId = "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId = "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds = 43, Att = 0, Tds = 21, Cmp=12,Int = 2},
+               new Passing { Id = 108, PlayerId = "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId = "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds = 45, Att = 0, Tds = 22, Cmp=15,Int = 3},  
                new Passing { Id = 107, PlayerId = "ed29fd68-0d5d-4636-8010-31436a78c9c6", EntryId = "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds = 248, Att = 26, Tds = 3, Cmp=20,Int = 0 } 
                
             );

@@ -1,0 +1,9 @@
+2020-03-25 17:34:18.655 +01:00 [Information] Starting up
+2020-03-25 17:34:20.913 +01:00 [Information] Entity Framework Core "3.1.2" initialized '"AppDbContext"' using provider '"Microsoft.EntityFrameworkCore.InMemory"' with options: "StoreName=api-in-memory "
+2020-03-25 17:34:20.997 +01:00 [Information] Saved 16 entities to in-memory store.
+2020-03-25 17:34:21.363 +01:00 [Information] Now listening on: "http://localhost:5000"
+2020-03-25 17:34:21.363 +01:00 [Information] Application started. Press Ctrl+C to shut down.
+2020-03-25 17:34:21.363 +01:00 [Information] Hosting environment: "Development"
+2020-03-25 17:34:21.363 +01:00 [Information] Content root path: "/Users/sirgidy/Downloads/sm-coding-challenge-master"
+2020-03-25 17:35:03.387 +01:00 [Information] Entity Framework Core "3.1.2" initialized '"AppDbContext"' using provider '"Microsoft.EntityFrameworkCore.InMemory"' with options: "StoreName=api-in-memory "
+2020-03-25 17:35:03.593 +01:00 [Information] Player PlayerResource { rushing: [Rushing { Id: 105, PlayerId: "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId: "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds: 43, Att: 0, Tds: 21, Fum: 0 }], passing: [Passing { Id: 105, PlayerId: "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId: "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds: 43, Att: 0, Tds: 21, Cmp: 12, Int: 2 }], receiving: [Receiving { Id: 110, PlayerId: "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId: "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", Yds: 7, Tds: 21, Rec: 1 }], kicking: [Kicking { Id: 101, PlayerId: "2fda010a-8c62-4c07-b601-4ba03f57e6af", EntryId: "9ecf8040-10f9-4a5c-92da-1b4d77bd67602014REG4ki", FldGoalsMade: 4, FldGoalsAtt: 4, ExtraPtMade: 3, ExtraPtAtt: 3, Player: null }], PlayerId: "2fda010a-8c62-4c07-b601-4ba03f57e6af", Name: "Alex Smith", Position: "RB" } retrieved

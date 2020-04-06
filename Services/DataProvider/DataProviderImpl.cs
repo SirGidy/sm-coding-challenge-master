@@ -6,13 +6,14 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EFCore.BulkExtensions;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using sm_coding_challenge.Domain.Models;
 using sm_coding_challenge.Domain.Repositories;
 using sm_coding_challenge.Domain.Services;
 using sm_coding_challenge.Domain.Services.Communication;
 using sm_coding_challenge.Persistence.Context;
 using sm_coding_challenge.Resources;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace sm_coding_challenge.Services.DataProvider
 {
@@ -56,8 +57,8 @@ namespace sm_coding_challenge.Services.DataProvider
                     client.Timeout = Timeout;
                     var response = client.GetAsync(_appSettings.Value.JSonURL.ToString()).Result;
                     var stringData = response.Content.ReadAsStringAsync().Result;
-                    var dataResponse = JsonConvert.DeserializeObject<DataResponseModel>(stringData, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
-                    
+                    //var dataResponse = JsonConvert.DeserializeObject<DataResponseModel>(stringData, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto });
+                    var dataResponse = JsonSerializer.Deserialize<DataResponseModel>(stringData);
                     List<Rushing> rushings = new List<Rushing>();
 
                     foreach (var player in dataResponse.Rushing)
